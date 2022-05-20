@@ -6,12 +6,9 @@ import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import org.grails.events.bus.ExecutorEventBus
 import org.springframework.beans.factory.FactoryBean
-import org.springframework.beans.factory.InitializingBean
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.SmartInitializingSingleton
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
-import org.springframework.core.task.AsyncTaskExecutor
 
 import java.util.concurrent.ExecutorService
 
@@ -23,7 +20,7 @@ import java.util.concurrent.ExecutorService
  */
 @CompileStatic
 @Slf4j
-class EventBusFactoryBean extends EventBusBuilder implements FactoryBean<EventBus>, InitializingBean, ApplicationContextAware {
+class EventBusFactoryBean extends EventBusBuilder implements FactoryBean<EventBus>, SmartInitializingSingleton, ApplicationContextAware {
 
     ApplicationContext applicationContext
     EventBus eventBus
@@ -44,7 +41,7 @@ class EventBusFactoryBean extends EventBusBuilder implements FactoryBean<EventBu
     }
 
     @Override
-    void afterPropertiesSet() throws Exception {
+    void afterSingletonsInstantiated() throws Exception {
         this.eventBus = super.build()
     }
 
