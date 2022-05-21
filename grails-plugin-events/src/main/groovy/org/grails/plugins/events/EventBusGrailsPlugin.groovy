@@ -46,7 +46,9 @@ class EventBusGrailsPlugin extends Plugin {
         {->
             Config config = grailsApplication.config
             grailsEventBus(EventBusFactoryBean)
-            gormDispatchEventRegistrar(GormDispatcherRegistrar, ref("grailsEventBus"))
+            gormDispatchEventRegistrar(GormDispatcherRegistrar) { bean ->
+                bean.lazyInit = true
+            }
 
             // the legacy reactor EventBus, here for backwards compatibility
             eventBus(EventBus, ref('grailsEventBus'))

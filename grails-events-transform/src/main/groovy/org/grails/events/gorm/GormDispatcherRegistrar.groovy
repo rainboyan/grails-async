@@ -5,8 +5,12 @@ import groovy.transform.CompileStatic
 import org.grails.datastore.gorm.events.ConfigurableApplicationEventPublisher
 import org.grails.datastore.mapping.core.Datastore
 import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
+import org.springframework.beans.BeansException
+import org.springframework.beans.factory.BeanFactory
+import org.springframework.beans.factory.BeanFactoryAware
 import org.springframework.beans.factory.FactoryBean
 import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.SmartInitializingSingleton
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 
@@ -17,15 +21,15 @@ import org.springframework.context.ApplicationEventPublisher
  * @since 3.3
  */
 @CompileStatic
-class GormDispatcherRegistrar implements FactoryBean<GormDispatcherRegistrar>, InitializingBean {
+class GormDispatcherRegistrar implements FactoryBean<GormDispatcherRegistrar>, BeanFactoryAware, InitializingBean, SmartInitializingSingleton {
+    private BeanFactory beanFactory
 
     @Autowired(required = false) Datastore[] datastores
     @Autowired(required = false) GormAnnotatedSubscriber[] subscribers
 
-    protected final EventBus eventBus
+    protected EventBus eventBus
 
-    GormDispatcherRegistrar(EventBus eventBus) {
-        this.eventBus = eventBus
+    GormDispatcherRegistrar() {
     }
 
     @Override
@@ -67,5 +71,15 @@ class GormDispatcherRegistrar implements FactoryBean<GormDispatcherRegistrar>, I
                 }
             }
         }
+    }
+
+    @Override
+    void afterSingletonsInstantiated() {
+        this.eventBus = this.beanFactory.getBean(EventBus)
+    }
+
+    @Override
+    void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory
     }
 }
