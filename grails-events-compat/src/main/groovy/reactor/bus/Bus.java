@@ -13,6 +13,7 @@ import reactor.fn.Consumer;
  * @deprecated Here for compatibility only. Do not use directly
  */
 @Deprecated(since = "5.5", forRemoval = true)
+@SuppressWarnings("removal")
 public interface Bus<T> {
 
     /**

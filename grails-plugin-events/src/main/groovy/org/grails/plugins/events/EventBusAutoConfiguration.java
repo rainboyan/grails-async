@@ -58,7 +58,7 @@ public class EventBusAutoConfiguration {
         return new SpringEventTranslator(grailsEventBus);
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({ "deprecation", "removal" })
     @ConditionalOnClass(reactor.bus.EventBus.class)
     @Configuration
     static class EventCompatAutoConfiguration {
