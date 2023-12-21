@@ -30,6 +30,7 @@ public interface Bus<T> {
      *
      * @param selector The {@literal Selector} to be used for matching
      * @param consumer The {@literal Consumer} to be triggered
+     * @param <V> The type of {@literal Consumer}
      * @return A {@link Subscription} object that allows the caller to interact with the given mapping
      */
     <V extends T> Subscription<Object, Consumer<? extends T>> on(final Selector selector,
